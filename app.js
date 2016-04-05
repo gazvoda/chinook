@@ -5,6 +5,8 @@ if (!process.env.PORT)
 var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('chinook.sl3');
 
+var perpage = 20;
+
 /* calls callback with specified page's artists and artist's details */
 var artists = function(page, artist, details, callback) {
   db.all("SELECT Artist.ArtistId, Name, StarsNo " +
@@ -105,6 +107,14 @@ var genres = function(artist, callback) {
 var express = require('express');
 var app = express();
 
+app.get('/', function(request, response) {
+  response.redirect('/artists/1');
+});
+
+app.use(express.static('public'));
+
+
+
 /* settings for static application files */
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
@@ -191,4 +201,6 @@ app.get('/pages', function(request, response) {
   });
 });
 
-
+app.listen(process.env.PORT, function() {
+  console.log('Strežnik je pognan!');
+});
